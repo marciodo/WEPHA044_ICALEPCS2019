@@ -1,1 +1,8 @@
 .DS_Store
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.log
+WEPHA044.pdf
+WEPHA044.run.xml
