@@ -1,0 +1,313 @@
+% !TeX spellcheck = en_US
+%
+%
+% v 2.3  Feb 2019   Volker RW Schaa
+%		# changes in the collaboration therefore updated file "jacow-collaboration.tex"
+%		# all References with DOIs have their period/full stop before the DOI (after pp. or year)
+%		# in the author/affiliation block all ZIP codes in square brackets removed as it was not 
+%         understood as optional parameter and ZIP codes had bin put in brackets
+%       # References to the current IPAC are changed to "IPAC'19, Melbourne, Australia"
+%       # font for "url" style changed to "newtxtt" as it is easier to distinguish "O" and "0"
+%
+\documentclass[letter,
+               %boxit,        % check whether paper is inside correct margins
+               %titlepage,    % separate title page
+               %refpage       % separate references
+               biblatex,     % biblatex is used
+               keeplastbox,   % flushend option: not to un-indent last line in References
+               %nospread,     % flushend option: do not fill with whitespace to balance columns
+               %hyphens,      % allow \url to hyphenate at "-" (hyphens)
+               %xetex,        % use XeLaTeX to process the file
+               %luatex,       % use LuaLaTeX to process the file
+               ]{jacow}
+%
+% ONLY FOR \footnote in table/tabular
+%
+\usepackage{pdfpages,multirow,ragged2e} %
+%
+% CHANGE SEQUENCE OF GRAPHICS EXTENSION TO BE EMBEDDED
+% ----------------------------------------------------
+% test for XeTeX where the sequence is by default eps-> pdf, jpg, png, pdf, ...
+%    and the JACoW template provides JACpic2v3.eps and JACpic2v3.jpg which
+%    might generates errors, therefore PNG and JPG first
+%
+\makeatletter%
+	\ifboolexpr{bool{xetex}}
+	 {\renewcommand{\Gin@extensions}{.pdf,%
+	                    .png,.jpg,.bmp,.pict,.tif,.psd,.mac,.sga,.tga,.gif,%
+	                    .eps,.ps,%
+	                    }}{}
+\makeatother
+
+% CHECK FOR XeTeX/LuaTeX BEFORE DEFINING AN INPUT ENCODING
+% --------------------------------------------------------
+%   utf8  is default for XeTeX/LuaTeX
+%   utf8  in LaTeX only realises a small portion of codes
+%
+\ifboolexpr{bool{xetex} or bool{luatex}} % test for XeTeX/LuaTeX
+ {}                                      % input encoding is utf8 by default
+ {\usepackage[utf8]{inputenc}}           % switch to utf8
+
+\usepackage[USenglish]{babel}
+
+
+%
+% if BibLaTeX is used
+%
+\ifboolexpr{bool{jacowbiblatex}}%
+ {%
+  \addbibresource{WEPHA044.bib}
+  \addbibresource{biblatex-examples.bib}
+ }{}
+\listfiles
+
+%%
+%%   Lengths for the spaces in the title
+%%   \setlength\titleblockstartskip{..}  %before title, default 3pt
+%%   \setlength\titleblockmiddleskip{..} %between title + author, default 1em
+%%   \setlength\titleblockendskip{..}    %afterauthor, default 1em
+
+\begin{document}
+
+\title{Upgrade of the Bunch Length and Bunch Charge Control Systems for the New SLAC Free Electron Laser}
+
+\author{M. P. Donadio\thanks{marcio@slac.stanford.edu}, A. S. Fisher, L. Sapozhnikov, SLAC, Menlo Park, CA 94025, USA}
+	
+\maketitle
+
+
+\begin{abstract}
+In 2019 SLAC is building a new linear accelerator based on superconducting niobium cavities. The first one, now called the copper linac, could generate 120 electron bunches per second. The new one, called superconducting linac, will generate 1 million per second, bringing some challenges to many devices along with the accelerator. Most of them receive sensors and actuators in a VME-based Platform with its control running in software, with RTEMS as OS. This is feasible for 120 Hz, but not for 1 MHz. The new control hardware is ATCA-based Platform, that has carrier boards with FPGA connected to servers running Embedded real-time Linux OS, forming the High-Performance System (HPS). Instead of having all the new architecture installed at the accelerator and tested on the go, SLAC used the strategy of testing the systems in the copper linac, to have them ready to use in the superconducting linac in what was called the Mission Readiness Program. The Bunch Length System and the Bunch Charge System are examples of devices of this program. Both systems were tested in the copper linac at 120 Hz, with excellent results. The next step is to test them at the superconducting linac, at 1 MHz.
+\end{abstract}
+
+
+\section{Introduction}
+LCLS has two bunch length monitors based on pyro detectors\cite{blen-pac07} and xxx bunch charge monitors based on Toroids, the two types of devices that were in the scope of this upgrade. Beyond these devices, LCLS uses gap diode to measure the bunch length\cite{injector-commissioning-2007} and Faraday cup and BPMs to measure the bunch charge [reference].
+
+\subsection{Pyro Detector Bunch Length Structure}
+LCLS has two bunch compressors (BC). A hole mirror is placed after the last bending magnet of each BC, generating diffraction radiation (DR) from the edge radiation (ER) (see Fig. \ref{fig:blen_struct1}). The DR is, then, reflected, split, and filtered before getting to two pyro detectors (see Fig. \ref{fig:blen_struct2}). \cite{blen-pac07}
+
+By using specific optical filters it is possible to measure difference in the intensity of the signals at the pyro detector output for different lengths of the bunch. Comparing signal intensity for different bunches it is possible to know that one bunch is larger or shorter relative to the other. Calculating the absolute length is only possible when the charge of the beam is used for normalization. [reference]
+
+\begin{figure}[!htb]
+   \centering
+   \includegraphics*[width=\columnwidth]{BunchLengthStruct_1}
+   \caption{ER from bending magnet generating DR through a hole mirror. Reproduced from \cite{blen-pac07} with permission from the authors.}
+   \label{fig:blen_struct1}
+\end{figure}
+
+\begin{figure}[!htb]
+   \centering
+   \includegraphics*[width=\columnwidth]{BunchLengthStruct_2}
+   \caption{Optical structure of the bunch length system showing how the DR is reflected, split, and filtered before getting to the pyro detectors. Reproduced from \cite{blen-pac07} with permission from the authors.}
+   \label{fig:blen_struct2}
+\end{figure}
+
+\subsection{Toroid Bunch Charge Structure}
+A toroid is placed at the accelerator in a way that the electron beam passes through its hole, inducting a current in the turns. This current is conditioned as it can have enough width for the temporal resolution of the digitizer. The digitized signal is integrated resulting in the bunch charge. [reference]
+
+[figure showing structure]
+
+\section{Bunch Length System}
+The signal of the pyro detectors is digitalized, processed by an equation that results in the length of the bunch, and timestamped to log a correspondence between the result and the electron bunch among all the accelerator systems. In the next two sections we will show the architecture of the previous VME-based system and how it was upgraded to an ATCA-based architecture.
+
+\subsection{VME-based architecture}
+
+
+\subsection{ATCA-based architecture}
+
+\section{Bunch Charge System}
+bla bla bla.
+
+\begin{Itemize}
+    \item  Either A4 (\SI{21.0}{cm}~$\times$~\SI{29.7}{cm}; \SI{8.27}{in}~$\times$~\SI{11.69}{in}) or US
+           letter size (\SI{21.6}{cm}~$\times$~\SI{27.9}{cm}; \SI{8.5}{in}~$\times$~\SI{11.0}{in}) paper.
+    \item  Single-spaced text in two columns of \SI{82.5}{mm} (\SI{3.25}{in}) with \SI{5.3}{mm}
+           (\SI{0.2}{in}) separation. More recent versions of Microsoft Word have a default spacing of 1.5 lines;
+           authors must change this to 1 line.
+    \item  The text located within the margins specified in Table~\ref{tab:margins}.
+\end{Itemize}
+\begin{table}[!hbt]
+   \centering
+   \caption{Margin Specifications}
+   \begin{tabular}{lcc}
+       \toprule
+       \textbf{Margin} & \textbf{A4 Paper}                      & \textbf{US Letter Paper} \\
+       \midrule
+           Top         & \SI{37}{mm} (\SI{1.46}{in})            & \SI{0.75}{in} (\SI{19}{mm})        \\ %[3pt]
+          Bottom       & \SI{19}{mm} (\SI{0.75}{in})            & \SI{0.75}{in} (\SI{19}{mm})        \\ %[3pt]
+           Left        & \SI{20}{mm} (\SI{0.79}{in})            & \SI{0.79}{in} (\SI{20}{mm})        \\ %[3pt]
+           Right       & \SI{20}{mm} (\SI{0.79}{in})            & \SI{1.02}{in} (\SI{26}{mm})        \\
+       \bottomrule
+   \end{tabular}
+   \label{tab:margins}
+\end{table}
+
+\subsection{subsection 2.2}
+bla bla bla.
+
+\begin{figure}[!htb]
+   \centering
+   \includegraphics*[width=.7\columnwidth]{JACpic_mc}
+   \caption{Layout of papers.}
+   \label{fig:paper_layout}
+\end{figure}
+
+\begin{figure*}[!tbh]
+    \centering
+    \includegraphics*[width=\textwidth]{JACpic2}
+
+    \caption{Example of a full-width figure showing the JACoW Team at their annual
+    	     meeting in December 2018. This figure has a multi-line caption that has to be
+    	     justified rather than centred.} %US
+    \label{fig:jacow_team}
+\end{figure*}
+
+\subsection{subsection 2.3}
+
+bla bla bla.
+
+\subsection{subsection 2.4}
+
+bla bla bla.
+
+\subsection{subsection 2.5}
+
+bla bla bla.
+
+\subsubsection{subsubsection 2.5.1} bla bla bla.
+
+\subsection{subsection 2.6}
+
+bla bla bla.
+
+\subsection{subsection 2.7}
+
+bla bla bla.
+
+\begin{equation}\label{eq:label}
+    C_B=\frac{q^3}{3\epsilon_{0} mc}=\SI{3.54}{\micro eV/T}
+\end{equation}
+
+\subsection{subsection 2.8}
+	
+bla bla bla.
+
+\subsection{subsection 2.9}
+bla bla bla.
+
+  \begin{table}[h!b]
+	\setlength\tabcolsep{3.5pt}
+	\centering
+	\caption{Summary of Styles}
+	\label{tab:styles}
+	\begin{tabular}{llcc}
+		\toprule
+		\textbf{Style} & \textbf{Font}               & \textbf{Space}  & \textbf{Space} \\
+		&                             & \textbf{Before} & \textbf{After} \\
+		\midrule
+		\textbf{PAPER}  & \SI{14}{pt}                 & \SI{0}{pt}      & \SI{3}{pt}  \\
+		\textbf{TITLE}  & \textbf{UPPERCASE}          &                 &      \\
+		& \textbf{EXCEPT FOR}         &                 &      \\
+		& \textbf{REQUIRED lowercase} &                 &      \\
+		& \textbf{letters}            &                 &      \\
+		& \textbf{Bold}               &                 &      \\[5pt]
+		%\midrule
+		Author list  & \SI{12}{pt}                 & \SI{9}{pt}      & \SI{12}{pt} \\
+		& UPPER- and lowercase        &                 &      \\[5pt]
+		%\midrule
+		\textit{Abstract} & \SI{12}{pt}                 & \SI{0}{pt}      & \SI{3}{pt} \\
+		\textit{Title}  & \textit{Initial Caps}       &                 &      \\
+		& \textit{Italic}             &                 &      \\[5pt]
+		%\midrule
+		\textbf{Section}  & \SI{12}{pt}                 & \SI{9}{pt}      & \SI{3}{pt}  \\
+		\textbf{Heading}  & \textbf{UPPERCASE}          &                 &      \\
+		& \textbf{bold}               &                 &      \\[5pt]
+		%\midrule
+		\textit{Subsection} & \SI{12}{pt}                 & \SI{6}{pt}      & \SI{3}{pt}  \\
+		\textit{Heading}
+                             & \textit{Initial Caps}       &                 &      \\
+		& \textit{Italic}             &                 &      \\[5pt]
+		%\midrule
+		\textbf{Third-level} & \SI{10}{pt}                 & \SI{6}{pt}      & \SI{0}{pt}  \\
+		\textbf{Heading}     
+                            & \textbf{Initial Caps}       &                 &      \\
+		& \textbf{Bold}               &                 &      \\[5pt]
+		%\midrule
+		Figure        & \SI{10}{pt}                 & \SI{3}{pt}      & $\ge$\SI{3}{pt}  \\
+		Captions      &                             &                 &      \\[5pt]
+		%\midrule
+		Table         & \SI{10}{pt}                 & $\ge$\SI{3}{pt} & \SI{3}{pt}  \\
+		Captions	  &                             &                 &      \\[5pt]
+		%\midrule
+		Equations     & \SI{10}{pt} base font       & $\ge$\SI{6}{pt}     & $\ge$\SI{6}{pt} \\[5pt]
+		%\midrule
+		References      & \SI{9}{pt}				& \SI{0}{pt}      & \SI{3}{pt} \\
+        when $\le9$ 	& \verb|\bibliography{9}|	&                 &  \\[5pt]
+        Refs. $\ge10$ 	& \SI{9}{pt}				& \SI{0}{pt}      & \SI{3}{pt}  \\
+                		& \verb|\bibliography{99}|	&    &    \\
+		\bottomrule   %\SI{0.25}{in}
+	\end{tabular}
+\end{table}
+
+\subsection{subsection 2.10}
+
+bla bla bla.
+
+\subsection{subsection 2.11}
+
+bla bla bla. 
+
+\section{section 3}
+
+bla bla bla.
+
+\section{section 4}
+
+bla bla bla.
+
+\section{section 5}
+
+bla bla bla.
+
+\section{Results and Discussion}
+
+bla bla bla.
+
+
+\section{CONCLUSION}
+
+bla bla bla.
+
+\section{ACKNOWLEDGMENTS}
+
+bla bla bla.
+
+
+%
+% only for "biblatex"
+%
+\ifboolexpr{bool{jacowbiblatex}}%
+	{\printbibliography}%
+	{%
+	% "biblatex" is not used, go the "manual" way
+	
+	%\begin{thebibliography}{99}   % Use for  10-99  references
+	\begin{thebibliography}{9} % Use for 1-9 references
+	
+	\bibitem{jacow-help}
+		JACoW,
+		\url{http://www.jacow.org}
+	
+	\bibitem{IEEE}
+		\textit{IEEE Editorial Style Manual},
+		IEEE Periodicals, Piscataway,
+		NJ, USA, Oct. 2014, pp. 34--52.
+
+	\bibitem{journal-abbreviations}
+	\url{https://woodward.library.ubc.ca/researchhelp/journal-abbreviations/}
+
+	\end{thebibliography}
+} % end \ifboolexpr
+
+\end{document}
