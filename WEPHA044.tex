@@ -132,8 +132,22 @@ Figure \ref{fig:blen_vme} shows the high-level process of the original bunch len
    \item The VME IOC sends an FCOM package to the Fast Feedback System, containing the calculated bunch length.
 \end{enumerate}
 
+As seen, all the process is held by software running in RTEMS OS. Since we are in a condition where the minimum distance between the bunches is 8.33 ms, it is feasible to let the software running in a real-time OS take care of all the processing. The new XFEL, though, will operate at maximum of 1 MHz frequency, which reduces time between bunches to \SI{1}{\micro\meter}. For this time range, another architecture is needed. [reference]
 
 \subsection{ATCA-based architecture}
+To work with high-processing speed, SLAC has chosen to use FPGAs. The architecture of choice to have the FPGAs on board is ATCA [reference].
+
+A project called Mission Readiness was created to substitute the VME-based architecure with the ATCA, but still using the 120 Hz frequency. The goal was to verify if LCLS-I would still operate as before after the control hardware was changed. [reference]
+
+Figure [figure] shows how the new architecture was applied to the Bunch Length System of LCLS-I.
+
+\begin{figure}[!htb]
+   \centering
+   \includegraphics*[width=\columnwidth]{BLEN_VME_Process}
+   \caption{The original (before the upgrade) bunch length system process.}
+   \label{fig:blen_atca}
+\end{figure}
+
 
 \section{Bunch Charge System}
 bla bla bla.
