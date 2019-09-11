@@ -112,27 +112,33 @@ A toroid is placed at the accelerator in a way that the electron beam passes thr
 The signal of the pyro detectors is digitalized, processed by an equation that results in the length of the bunch, and timestamped to log a correspondence between the result and the electron bunch among all the accelerator systems. In the next two sections we will show the architecture of the previous VME-based system and how it was upgraded to an ATCA-based architecture.
 
 \subsection{VME-based architecture}
+Figure \ref{fig:blen_vme} shows the high-level process of the original bunch length system.
 
 \begin{figure}[!htb]
    \centering
    \includegraphics*[width=\columnwidth]{BLEN_VME_Process}
-   \caption{The original bunch length system process.}
+   \caption{The original (before the upgrade) bunch length system process.}
    \label{fig:blen_vme}
 \end{figure}
+
+\begin{enumerate}
+   \item The timing system sends a packet containing the timing pattern with event codes and the timestamp. The EVR in the VME crate receives this data. The IOC running in VME waits for a specific event code. When it arrives, the timestamp is registered.
+   \item Using the IP 445 module, the IOC running in VME sends a trigger to the digitizer, telling it to start collecting data from the pyro detector.
+   \item The IOC running in the VME tells to the IOC running in the Digitizer that it is waiting for data as soon as the Digitizer finishes its digitalization. The VME IOC also sends a timestamp that will be used by the Digitizer IOC as a data label.
+   \item When the digitalization is complete, the Digitizer IOC sends an UDPComm packet to the VME IOC with the digitized data containing one raw waveform per each of the pyro detectors. The data is labeled with the timestamp previously sent by the VME IOC. 
+   \item Parallel to the communication with the Digitizer IOC, the VME IOC receives the charge of the bunch (TMIT) sent by the BPM system, through an FCOM packet.
+   \item The VME IOC confirms the timestamp from the EVR, the Digitizer, and the BPM system and, if they match, it calculates the bunch length.
+   \item The result of the calculation is recorded in the many EPICS records that are part of the BSA system.
+   \item The VME IOC sends an FCOM package to the Fast Feedback System, containing the calculated bunch length.
+\end{enumerate}
+
 
 \subsection{ATCA-based architecture}
 
 \section{Bunch Charge System}
 bla bla bla.
 
-\begin{Itemize}
-    \item  Either A4 (\SI{21.0}{cm}~$\times$~\SI{29.7}{cm}; \SI{8.27}{in}~$\times$~\SI{11.69}{in}) or US
-           letter size (\SI{21.6}{cm}~$\times$~\SI{27.9}{cm}; \SI{8.5}{in}~$\times$~\SI{11.0}{in}) paper.
-    \item  Single-spaced text in two columns of \SI{82.5}{mm} (\SI{3.25}{in}) with \SI{5.3}{mm}
-           (\SI{0.2}{in}) separation. More recent versions of Microsoft Word have a default spacing of 1.5 lines;
-           authors must change this to 1 line.
-    \item  The text located within the margins specified in Table~\ref{tab:margins}.
-\end{Itemize}
+
 \begin{table}[!hbt]
    \centering
    \caption{Margin Specifications}
