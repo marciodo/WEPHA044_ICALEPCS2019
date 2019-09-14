@@ -108,6 +108,13 @@ A toroid is placed at the accelerator in a way that the electron beam passes thr
 
 [figure showing structure]
 
+\subsection{The Mission Readiness Project}
+As the description of the previous Bunch Length and Bunch Charge Systems will show in the next sections, before the LCLS upgrade all the process was held by software running in RTEMS OS. Since we were in a condition where the minimum distance between the bunches was 8.33 ms, it was feasible to let the software running in a real-time OS take care of all the processing. The new XFEL, though, will operate at maximum of 1 MHz frequency, which reduces time between bunches to \SI{1}{\micro\meter}. For this time range, another architecture is needed. [reference]
+
+To work with high-processing speed, SLAC has chosen to use FPGAs. The architecture of choice to have the FPGAs on board is ATCA [reference].
+
+A project called Mission Readiness was created to substitute the VME-based architecture with the ATCA, but still using the 120 Hz frequency. The goal was to verify if LCLS-I would still operate as before after the control hardware was changed. [reference]
+
 \section{Bunch Length System}
 The signal of the pyro detectors is digitalized, processed by an equation that results in the length of the bunch, and timestamped to log a correspondence between the result and the electron bunch among all the accelerator systems. In the next two sections we will show the architecture of the previous VME-based system and how it was upgraded to an ATCA-based architecture.
 
@@ -132,14 +139,8 @@ Figure \ref{fig:blen_vme} shows the high-level process of the original bunch len
    \item The VME IOC sends an FCOM package to the Fast Feedback System, containing the calculated bunch length.
 \end{enumerate}
 
-As seen, all the process is held by software running in RTEMS OS. Since we are in a condition where the minimum distance between the bunches is 8.33 ms, it is feasible to let the software running in a real-time OS take care of all the processing. The new XFEL, though, will operate at maximum of 1 MHz frequency, which reduces time between bunches to \SI{1}{\micro\meter}. For this time range, another architecture is needed. [reference]
-
 \subsection{ATCA-based architecture}
-To work with high-processing speed, SLAC has chosen to use FPGAs. The architecture of choice to have the FPGAs on board is ATCA [reference].
-
-A project called Mission Readiness was created to substitute the VME-based architecure with the ATCA, but still using the 120 Hz frequency. The goal was to verify if LCLS-I would still operate as before after the control hardware was changed. [reference]
-
-Figure \ref{fig:blen_atca} shows how the new architecture was applied to the Bunch Length System of LCLS-I. Here we don't show the complete ATCA architecture for the sake of simplicity, but detailed description can be found in \cite{ryan-2016}\cite{atca-bpm-2017}.
+Figure \ref{fig:blen_atca} shows how the new architecture was applied to the Bunch Length System of LCLS-I. Here we don't show the complete ATCA architecture for the sake of simplicity, but detailed description can be found in \cite{ryan-2016, atca-bpm-2017}.
 
 \begin{figure}[!htb]
    \centering
@@ -148,10 +149,52 @@ Figure \ref{fig:blen_atca} shows how the new architecture was applied to the Bun
    \label{fig:blen_atca}
 \end{figure}
 
+\begin{enumerate}
+   \item Similarly to the VME system, the timing system sends a packet containing the timing pattern with event codes and the timestamp, but now, the ATCA RTM receives this information and send it to the Carrier Board.
+   \item Now we have the FPGA firmware working with triggering the digitizer and waiting for the array of data to arrive.
+   \item The same as in the VME system, the IOC receives the charge of the bunch (TMIT) sent by the BPM system, through an FCOM packet.
+   \item The IOC sends the TMIT and timestamp to the FPGA firmware as it is an input for the bunch length calculation.
+   \item The firmware calculates the bunch length.
+   \item The result of the calculation is sent to the CPU.
+   \item The result of the calculation is recorded in the many EPICS records that are part of the BSA system.
+   \item The VME IOC sends an FCOM package to the Fast Feedback System, containing the calculated bunch length.
+\end{enumerate}
+
+In fact, the steps related to external systems (1, 3, 7, and 8) were kept the same as they wouldn't be changed.
 
 \section{Bunch Charge System}
-bla bla bla.
+The conditioned signal of the toroid is digitalized, processed by an equation that results in the charge of the bunch, and timestamped to log a correspondence between the result and the electron bunch among all the accelerator systems. In the next two sections we will show the architecture of the previous VME-based system and how it was upgraded to an ATCA-based architecture.
 
+\subsection{VME-based architecture}
+Figure \ref{fig:bcm_vme} shows the high-level process of the original bunch charge system.
+
+\begin{figure}[!htb]
+   \centering
+   \includegraphics*[width=\columnwidth]{BCM_VME_Process}
+   \caption{The upgraded bunch charge system process.}
+   \label{fig:bcm_vme}
+\end{figure}
+
+\subsection{ATCA-based architecture}
+Figure \ref{fig:bcm_atca} shows how the new architecture was applied to the Bunch Charge System of LCLS-I. Here we don't show the complete ATCA architecture for the sake of simplicity, but detailed description can be found in \cite{ryan-2016, atca-bpm-2017}.
+
+\begin{figure}[!htb]
+   \centering
+   \includegraphics*[width=\columnwidth]{BCM_ATCA_Process}
+   \caption{The upgraded bunch charge system process.}
+   \label{fig:bcm_atca}
+\end{figure}
+
+\begin{enumerate}
+   \item Similarly to the VME system, the timing system sends a packet containing the timing pattern with event codes and the timestamp, but now, the ATCA RTM receives this information and send it to the Carrier Board.
+   \item Now we have the FPGA firmware working with triggering the digitizer and waiting for the array of data to arrive.
+   \item The firmware calculates the bunch charge.
+   \item One Carrier Board is connected to many toroids. The firmware calculates the charge based of all of them and sets RTM digital signals according to the comparison of the results. These digital signals are received by the Machine Protection System, that will react if a bad condition raises.
+   \item The result of the calculation is sent to the CPU.
+   \item The result of the calculation is recorded in the many EPICS records that are part of the BSA system.
+\end{enumerate}
+
+The same way as we've seen for the BLEN, the interfaces to the external systems were not changed.
 
 \begin{table}[!hbt]
    \centering
@@ -169,8 +212,6 @@ bla bla bla.
    \label{tab:margins}
 \end{table}
 
-\subsection{subsection 2.2}
-bla bla bla.
 
 \begin{figure}[!htb]
    \centering
@@ -189,38 +230,16 @@ bla bla bla.
     \label{fig:jacow_team}
 \end{figure*}
 
-\subsection{subsection 2.3}
 
-bla bla bla.
-
-\subsection{subsection 2.4}
-
-bla bla bla.
-
-\subsection{subsection 2.5}
-
-bla bla bla.
 
 \subsubsection{subsubsection 2.5.1} bla bla bla.
 
-\subsection{subsection 2.6}
 
-bla bla bla.
-
-\subsection{subsection 2.7}
-
-bla bla bla.
 
 \begin{equation}\label{eq:label}
     C_B=\frac{q^3}{3\epsilon_{0} mc}=\SI{3.54}{\micro eV/T}
 \end{equation}
 
-\subsection{subsection 2.8}
-	
-bla bla bla.
-
-\subsection{subsection 2.9}
-bla bla bla.
 
   \begin{table}[h!b]
 	\setlength\tabcolsep{3.5pt}
@@ -275,26 +294,6 @@ bla bla bla.
 		\bottomrule   %\SI{0.25}{in}
 	\end{tabular}
 \end{table}
-
-\subsection{subsection 2.10}
-
-bla bla bla.
-
-\subsection{subsection 2.11}
-
-bla bla bla. 
-
-\section{section 3}
-
-bla bla bla.
-
-\section{section 4}
-
-bla bla bla.
-
-\section{section 5}
-
-bla bla bla.
 
 \section{Results and Discussion}
 
