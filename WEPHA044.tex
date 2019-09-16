@@ -175,6 +175,14 @@ Figure \ref{fig:bcm_vme} shows the high-level process of the original bunch char
    \label{fig:bcm_vme}
 \end{figure}
 
+\begin{enumerate}
+   \item The signal conditioner that receives the short current pulse from multiple toroids is constantly comparing the signals between them and, when a bad condition is measured, it changes the digital signals connected to the Machine Protection System (MPS).
+   \item The timing system sends a packet containing the timing pattern with event codes and the timestamp. The EVR in the VME crate receives this data.
+   \item The IP 300 module digitizes the conditioned signal and the IOC reads its value.
+   \item The IOC calculates the bunch charge.
+   \item The IOC takes the bunch charge and the timestamp read in step 2 and stores it in BSA.
+\end{enumerate}
+
 \subsection{ATCA-based architecture}
 Figure \ref{fig:bcm_atca} shows how the new architecture was applied to the Bunch Charge System of LCLS-I. Here we don't show the complete ATCA architecture for the sake of simplicity, but detailed description can be found in \cite{ryan-2016, atca-bpm-2017}.
 
@@ -189,12 +197,35 @@ Figure \ref{fig:bcm_atca} shows how the new architecture was applied to the Bunc
    \item Similarly to the VME system, the timing system sends a packet containing the timing pattern with event codes and the timestamp, but now, the ATCA RTM receives this information and send it to the Carrier Board.
    \item Now we have the FPGA firmware working with triggering the digitizer and waiting for the array of data to arrive.
    \item The firmware calculates the bunch charge.
-   \item One Carrier Board is connected to many toroids. The firmware calculates the charge based of all of them and sets RTM digital signals according to the comparison of the results. These digital signals are received by the Machine Protection System, that will react if a bad condition raises.
+   \item One Carrier Board is connected to many toroids. The firmware calculates the charge based of all of them and sets RTM digital signals according to the comparison of the results. These digital signals are received by the MPS, that will react if a bad condition raises.
    \item The result of the calculation is sent to the CPU.
    \item The result of the calculation is recorded in the many EPICS records that are part of the BSA system.
 \end{enumerate}
 
 The same way as we've seen for the BLEN, the interfaces to the external systems were not changed.
+
+\section{Results and Discussion}
+\subsection{Bunch Length}
+As seen in Fig. \ref{fig:blen_struct2}, the BLEN system uses two pyro detectors. In order to test the new system, one of them was connected to the digitizer in the ATCA. The accelerator was run with both systems operating at the same time. A positive test result should provide the exact same scalar number for the BLEN at the same beam pulse in both systems.
+
+Both pyro detector BLEN systems, one in sector 21, after Bunch Compressor (BC) 1, and one in sector 24 after BC 2 were tested.
+
+The test was performed for many different lengths. A correlation of 1 should be observed when we plot the measurement of one system against the other. Figures \ref{fig:blen_result_21} and \ref{fig:blen_result_24} shows the scattering with the ATCA system in the x-axis and the VME system in the y-axis. The linear regression result shows that the correlation is close to 1, does confirming that the new system provides the same expected results.
+
+During a few tests, the Fast-Feedback system received data from the ATCA system and the accelerator could be operated normally, as before.
+
+The filters were moved and we could check the reading of the limit switches according to what was expected.
+
+
+\section{CONCLUSION}
+
+bla bla bla.
+
+\section{ACKNOWLEDGMENTS}
+
+bla bla bla.
+
+\section{jacow examples to help}
 
 \begin{table}[!hbt]
    \centering
@@ -229,12 +260,6 @@ The same way as we've seen for the BLEN, the interfaces to the external systems 
     	     justified rather than centred.} %US
     \label{fig:jacow_team}
 \end{figure*}
-
-
-
-\subsubsection{subsubsection 2.5.1} bla bla bla.
-
-
 
 \begin{equation}\label{eq:label}
     C_B=\frac{q^3}{3\epsilon_{0} mc}=\SI{3.54}{\micro eV/T}
@@ -294,19 +319,6 @@ The same way as we've seen for the BLEN, the interfaces to the external systems 
 		\bottomrule   %\SI{0.25}{in}
 	\end{tabular}
 \end{table}
-
-\section{Results and Discussion}
-
-bla bla bla.
-
-
-\section{CONCLUSION}
-
-bla bla bla.
-
-\section{ACKNOWLEDGMENTS}
-
-bla bla bla.
 
 
 %
