@@ -1,25 +1,25 @@
 % !TeX spellcheck = en_US
 %
 %
-% v 2.3  Feb 2019   Volker RW Schaa
+% v 2.3 Feb 2019  Volker RW Schaa
 %		# changes in the collaboration therefore updated file "jacow-collaboration.tex"
 %		# all References with DOIs have their period/full stop before the DOI (after pp. or year)
 %		# in the author/affiliation block all ZIP codes in square brackets removed as it was not 
-%         understood as optional parameter and ZIP codes had bin put in brackets
-%       # References to the current IPAC are changed to "IPAC'19, Melbourne, Australia"
-%       # font for "url" style changed to "newtxtt" as it is easier to distinguish "O" and "0"
+%     understood as optional parameter and ZIP codes had bin put in brackets
+%    # References to the current IPAC are changed to "IPAC'19, Melbourne, Australia"
+%    # font for "url" style changed to "newtxtt" as it is easier to distinguish "O" and "0"
 %
 \documentclass[letter,
-               %boxit,        % check whether paper is inside correct margins
-               %titlepage,    % separate title page
-               %refpage       % separate references
-               biblatex,     % biblatex is used
-               keeplastbox,   % flushend option: not to un-indent last line in References
-               %nospread,     % flushend option: do not fill with whitespace to balance columns
-               %hyphens,      % allow \url to hyphenate at "-" (hyphens)
-               %xetex,        % use XeLaTeX to process the file
-               %luatex,       % use LuaLaTeX to process the file
-               ]{jacow}
+        %boxit,    % check whether paper is inside correct margins
+        %titlepage,  % separate title page
+        %refpage    % separate references
+        biblatex,   % biblatex is used
+        keeplastbox,  % flushend option: not to un-indent last line in References
+        %nospread,   % flushend option: do not fill with whitespace to balance columns
+        %hyphens,   % allow \url to hyphenate at "-" (hyphens)
+        %xetex,    % use XeLaTeX to process the file
+        %luatex,    % use LuaLaTeX to process the file
+        ]{jacow}
 %
 % ONLY FOR \footnote in table/tabular
 %
@@ -28,25 +28,25 @@
 % CHANGE SEQUENCE OF GRAPHICS EXTENSION TO BE EMBEDDED
 % ----------------------------------------------------
 % test for XeTeX where the sequence is by default eps-> pdf, jpg, png, pdf, ...
-%    and the JACoW template provides JACpic2v3.eps and JACpic2v3.jpg which
-%    might generates errors, therefore PNG and JPG first
+%  and the JACoW template provides JACpic2v3.eps and JACpic2v3.jpg which
+%  might generates errors, therefore PNG and JPG first
 %
 \makeatletter%
 	\ifboolexpr{bool{xetex}}
 	 {\renewcommand{\Gin@extensions}{.pdf,%
-	                    .png,.jpg,.bmp,.pict,.tif,.psd,.mac,.sga,.tga,.gif,%
-	                    .eps,.ps,%
-	                    }}{}
+	          .png,.jpg,.bmp,.pict,.tif,.psd,.mac,.sga,.tga,.gif,%
+	          .eps,.ps,%
+	          }}{}
 \makeatother
 
 % CHECK FOR XeTeX/LuaTeX BEFORE DEFINING AN INPUT ENCODING
 % --------------------------------------------------------
-%   utf8  is default for XeTeX/LuaTeX
-%   utf8  in LaTeX only realises a small portion of codes
+%  utf8 is default for XeTeX/LuaTeX
+%  utf8 in LaTeX only realises a small portion of codes
 %
 \ifboolexpr{bool{xetex} or bool{luatex}} % test for XeTeX/LuaTeX
- {}                                      % input encoding is utf8 by default
- {\usepackage[utf8]{inputenc}}           % switch to utf8
+ {}                   % input encoding is utf8 by default
+ {\usepackage[utf8]{inputenc}}      % switch to utf8
 
 \usepackage[USenglish]{babel}
 
@@ -56,16 +56,16 @@
 %
 \ifboolexpr{bool{jacowbiblatex}}%
  {%
-  \addbibresource{WEPHA044.bib}
-  \addbibresource{biblatex-examples.bib}
+ \addbibresource{WEPHA044.bib}
+ \addbibresource{biblatex-examples.bib}
  }{}
 \listfiles
 
 %%
-%%   Lengths for the spaces in the title
-%%   \setlength\titleblockstartskip{..}  %before title, default 3pt
-%%   \setlength\titleblockmiddleskip{..} %between title + author, default 1em
-%%   \setlength\titleblockendskip{..}    %afterauthor, default 1em
+%%  Lengths for the spaces in the title
+%%  \setlength\titleblockstartskip{..} %before title, default 3pt
+%%  \setlength\titleblockmiddleskip{..} %between title + author, default 1em
+%%  \setlength\titleblockendskip{..}  %afterauthor, default 1em
 
 \begin{document}
 
@@ -87,136 +87,134 @@ LCLS has two bunch length monitors based on pyro detectors\cite{blen-pac07} and 
 \subsection{Pyro Detector Bunch Length Structure}
 LCLS has two bunch compressors (BC). A hole mirror is placed after the last bending magnet of each BC, generating diffraction radiation (DR) from the edge radiation (ER) (see Fig. \ref{fig:blen_struct1}). The DR is, then, reflected, split, and filtered before getting to two pyro detectors (see Fig. \ref{fig:blen_struct2}). \cite{blen-pac07}
 
-By using specific optical filters it is possible to measure difference in the intensity of the signals at the pyro detector output for different lengths of the bunch. Comparing signal intensity for different bunches it is possible to know that one bunch is larger or shorter relative to the other. Calculating the absolute length is only possible when the charge of the beam is used for normalization. [reference]
+By using specific optical filters it is possible to measure the difference in the intensity of the signals at the pyro detector output for different lengths of the bunch. Comparing signal intensity for different bunches it is possible to know that one bunch is larger or shorter relative to the other. Calculating the absolute length is only possible when the charge of the beam is used for normalization. [reference]
 
 \begin{figure}[!htb]
-   \centering
-   \includegraphics*[width=\columnwidth]{BunchLengthStruct_1}
-   \caption{ER from bending magnet generating DR through a hole mirror. Reproduced from \cite{blen-pac07} with permission from the authors.}
-   \label{fig:blen_struct1}
+  \centering
+  \includegraphics*[width=\columnwidth]{BunchLengthStruct_1}
+  \caption{ER from bending magnet generating DR through a hole mirror. Reproduced from \cite{blen-pac07} with permission from the authors.}
+  \label{fig:blen_struct1}
 \end{figure}
 
 \begin{figure}[!htb]
-   \centering
-   \includegraphics*[width=\columnwidth]{BunchLengthStruct_2}
-   \caption{Optical structure of the bunch length system showing how the DR is reflected, split, and filtered before getting to the pyro detectors. Reproduced from \cite{blen-pac07} with permission from the authors.}
-   \label{fig:blen_struct2}
+  \centering
+  \includegraphics*[width=\columnwidth]{BunchLengthStruct_2}
+  \caption{Optical structure of the bunch length system showing how the DR is reflected, split, and filtered before getting to the pyro detectors. Reproduced from \cite{blen-pac07} with permission from the authors.}
+  \label{fig:blen_struct2}
 \end{figure}
 
 \subsection{Toroid Bunch Charge Structure}
-A toroid is placed at the accelerator in a way that the electron beam passes through its hole, inducting a current in the turns. This current is conditioned as it can have enough width for the temporal resolution of the digitizer. The digitized signal is integrated resulting in the bunch charge. [reference]
-
-[figure showing structure]
+A toroid is placed at the accelerator in a way that the electron beam passes through its hole, inducing a current in the turns. This current is conditioned and digitized. By measuring the peak of the conditioned signal, the system can calculate the bunch charge. For an explanation of the theory, please refer to \cite{slac-pub-398}.
 
 \subsection{The Mission Readiness Project}
-As the description of the previous Bunch Length and Bunch Charge Systems will show in the next sections, before the LCLS upgrade all the process was held by software running in RTEMS OS. Since we were in a condition where the minimum distance between the bunches was 8.33 ms, it was feasible to let the software running in a real-time OS take care of all the processing. The new XFEL, though, will operate at maximum of 1 MHz frequency, which reduces time between bunches to \SI{1}{\micro\meter}. For this time range, another architecture is needed. [reference]
+As the description of the previous Bunch Length and Bunch Charge Systems will show in the next sections, before the LCLS upgrade all the process was held by software running in RTEMS OS. Since we were in a condition where the minimum distance between the bunches was 8.33 ms, it was feasible to let the software running in a real-time OS take care of all the processing. The new XFEL, though, will operate at a maximum of 1 MHz frequency, which reduces the time between bunches to \SI{1}{\micro\meter}. For this time range, another architecture is needed. [reference]
 
 To work with high-processing speed, SLAC has chosen to use FPGAs. The architecture of choice to have the FPGAs on board is ATCA [reference].
 
 A project called Mission Readiness was created to substitute the VME-based architecture with the ATCA, but still using the 120 Hz frequency. The goal was to verify if LCLS-I would still operate as before after the control hardware was changed. [reference]
 
 \section{Bunch Length System}
-The signal of the pyro detectors is digitalized, processed by an equation that results in the length of the bunch, and timestamped to log a correspondence between the result and the electron bunch among all the accelerator systems. In the next two sections we will show the architecture of the previous VME-based system and how it was upgraded to an ATCA-based architecture.
+The signal of the pyro detectors is digitalized, processed by an equation that results in the length of the bunch, and timestamped to log a correspondence between the result and the electron bunch among all the accelerator systems. In the next two sections, we will show the architecture of the previous VME-based system and how it was upgraded to an ATCA-based architecture.
 
 \subsection{VME-based architecture}
 Figure \ref{fig:blen_vme} shows the high-level process of the original bunch length system.
 
 \begin{figure}[!htb]
-   \centering
-   \includegraphics*[width=\columnwidth]{BLEN_VME_Process}
-   \caption{The original (before the upgrade) bunch length system process.}
-   \label{fig:blen_vme}
+  \centering
+  \includegraphics*[width=.8\columnwidth]{BLEN_VME_Process}
+  \caption{The original (before the upgrade) bunch length system process.}
+  \label{fig:blen_vme}
 \end{figure}
 
 \begin{enumerate}
-   \item The timing system sends a packet containing the timing pattern with event codes and the timestamp. The EVR in the VME crate receives this data. The IOC running in VME waits for a specific event code. When it arrives, the timestamp is registered.
-   \item Using the IP 445 module, the IOC running in VME sends a trigger to the digitizer, telling it to start collecting data from the pyro detector.
-   \item The IOC running in the VME tells to the IOC running in the Digitizer that it is waiting for data as soon as the Digitizer finishes its digitalization. The VME IOC also sends a timestamp that will be used by the Digitizer IOC as a data label.
-   \item When the digitalization is complete, the Digitizer IOC sends an UDPComm packet to the VME IOC with the digitized data containing one raw waveform per each of the pyro detectors. The data is labeled with the timestamp previously sent by the VME IOC. 
-   \item Parallel to the communication with the Digitizer IOC, the VME IOC receives the charge of the bunch (TMIT) sent by the BPM system, through an FCOM packet.
-   \item The VME IOC confirms the timestamp from the EVR, the Digitizer, and the BPM system and, if they match, it calculates the bunch length.
-   \item The result of the calculation is recorded in the many EPICS records that are part of the BSA system.
-   \item The VME IOC sends an FCOM package to the Fast Feedback System, containing the calculated bunch length.
+  \item The timing system sends a packet containing the timing pattern with event codes and the timestamp. The EVR in the VME crate receives this data. The IOC running in VME waits for a specific event code. When it arrives, the timestamp is registered.
+  \item Using the IP 445 module, the IOC running in VME sends a trigger to the digitizer, telling it to start collecting data from the pyro detector.
+  \item The IOC running in the VME tells to the IOC running in the Digitizer that it is waiting for data as soon as the Digitizer finishes its digitalization. The VME IOC also sends a timestamp that will be used by the Digitizer IOC as a data label.
+  \item When the digitalization is complete, the Digitizer IOC sends an UDPComm packet to the VME IOC with the digitized data containing one raw waveform per each of the pyro detectors. The data is labeled with the timestamp previously sent by the VME IOC. 
+  \item Parallel to the communication with the Digitizer IOC, the VME IOC receives the charge of the bunch (TMIT) sent by the BPM system, through an FCOM packet.
+  \item The VME IOC confirms the timestamp from the EVR, the Digitizer, and the BPM system and, if they match, it calculates the bunch length.
+  \item The result of the calculation is recorded in the many EPICS records that are part of the BSA system.
+  \item The VME IOC sends an FCOM package to the Fast Feedback System, containing the calculated bunch length.
 \end{enumerate}
 
 \subsection{ATCA-based architecture}
-Figure \ref{fig:blen_atca} shows how the new architecture was applied to the Bunch Length System of LCLS-I. Here we don't show the complete ATCA architecture for the sake of simplicity, but detailed description can be found in \cite{ryan-2016, atca-bpm-2017}.
+Figure \ref{fig:blen_atca} shows how the new architecture was applied to the Bunch Length System of LCLS-I. Here we don't show the complete ATCA architecture for the sake of simplicity, but the detailed description can be found in \cite{ryan-2016, atca-bpm-2017}.
 
 \begin{figure}[!htb]
-   \centering
-   \includegraphics*[width=\columnwidth]{BLEN_ATCA_Process}
-   \caption{The upgraded bunch length system process.}
-   \label{fig:blen_atca}
+  \centering
+  \includegraphics*[width=.8\columnwidth]{BLEN_ATCA_Process}
+  \caption{The upgraded bunch length system process.}
+  \label{fig:blen_atca}
 \end{figure}
 
 \begin{enumerate}
-   \item Similarly to the VME system, the timing system sends a packet containing the timing pattern with event codes and the timestamp, but now, the ATCA RTM receives this information and send it to the Carrier Board.
-   \item Now we have the FPGA firmware working with triggering the digitizer and waiting for the array of data to arrive.
-   \item The same as in the VME system, the IOC receives the charge of the bunch (TMIT) sent by the BPM system, through an FCOM packet.
-   \item The IOC sends the TMIT and timestamp to the FPGA firmware as it is an input for the bunch length calculation.
-   \item The firmware calculates the bunch length.
-   \item The result of the calculation is sent to the CPU.
-   \item The result of the calculation is recorded in the many EPICS records that are part of the BSA system.
-   \item The VME IOC sends an FCOM package to the Fast Feedback System, containing the calculated bunch length.
+  \item Similarly to the VME system, the timing system sends a packet containing the timing pattern with event codes and the timestamp, but now, the ATCA RTM receives this information and send it to the Carrier Board.
+  \item Now we have the FPGA firmware working with triggering the digitizer and waiting for the array of data to arrive.
+  \item The same as in the VME system, the IOC receives the charge of the bunch (TMIT) sent by the BPM system, through an FCOM packet.
+  \item The IOC sends the TMIT and timestamp to the FPGA firmware as it is an input for the bunch length calculation.
+  \item The firmware calculates the bunch length.
+  \item The result of the calculation is sent to the CPU.
+  \item The result of the calculation is recorded in the many EPICS records that are part of the BSA system.
+  \item The VME IOC sends an FCOM package to the Fast Feedback System, containing the calculated bunch length.
 \end{enumerate}
 
-In fact, the steps related to external systems (1, 3, 7, and 8) were kept the same as they wouldn't be changed.
+The steps related to external systems (1, 3, 7, and 8) were kept the same as these systems wouldn't be changed.
 
 \section{Bunch Charge System}
-The conditioned signal of the toroid is digitalized, processed by an equation that results in the charge of the bunch, and timestamped to log a correspondence between the result and the electron bunch among all the accelerator systems. In the next two sections we will show the architecture of the previous VME-based system and how it was upgraded to an ATCA-based architecture.
+The conditioned signal of the toroid is digitalized, processed by an equation that results in the charge of the bunch, and timestamped to log a correspondence between the result and the electron bunch among all the accelerator systems. In the next two sections, we will show the architecture of the previous VME-based system and how it was upgraded to an ATCA-based architecture.
 
 \subsection{VME-based architecture}
 Figure \ref{fig:bcm_vme} shows the high-level process of the original bunch charge system.
 
 \begin{figure}[!htb]
-   \centering
-   \includegraphics*[width=\columnwidth]{BCM_VME_Process}
-   \caption{The upgraded bunch charge system process.}
-   \label{fig:bcm_vme}
+  \centering
+  \includegraphics*[width=.8\columnwidth]{BCM_VME_Process}
+  \caption{The upgraded bunch charge system process.}
+  \label{fig:bcm_vme}
 \end{figure}
 
 \begin{enumerate}
-   \item The signal conditioner that receives the short current pulse from multiple toroids is constantly comparing the signals between them and, when a bad condition is measured, it changes the digital signals connected to the Machine Protection System (MPS).
-   \item The timing system sends a packet containing the timing pattern with event codes and the timestamp. The EVR in the VME crate receives this data.
-   \item The IP 300 module digitizes the conditioned signal and the IOC reads its value.
-   \item The IOC calculates the bunch charge.
-   \item The IOC takes the bunch charge and the timestamp read in step 2 and stores it in BSA.
+  \item The signal conditioner that receives the short current pulse from multiple toroids is constantly comparing the signals between them and, when a bad condition is measured, it changes the digital signals connected to the Machine Protection System (MPS).
+  \item The timing system sends a packet containing the timing pattern with event codes and the timestamp. The EVR in the VME crate receives this data.
+  \item The IP 300 module digitizes the conditioned signal and the IOC reads its value.
+  \item The IOC calculates the bunch charge.
+  \item The IOC takes the bunch charge and the timestamp read in step 2 and stores it in BSA.
 \end{enumerate}
 
 \subsection{ATCA-based architecture}
-Figure \ref{fig:bcm_atca} shows how the new architecture was applied to the Bunch Charge System of LCLS-I. Here we don't show the complete ATCA architecture for the sake of simplicity, but detailed description can be found in \cite{ryan-2016, atca-bpm-2017}.
+Figure \ref{fig:bcm_atca} shows how the new architecture was applied to the Bunch Charge System of LCLS-I. Here we don't show the complete ATCA architecture for the sake of simplicity, but the detailed description can be found in \cite{ryan-2016, atca-bpm-2017}.
 
 \begin{figure}[!htb]
-   \centering
-   \includegraphics*[width=\columnwidth]{BCM_ATCA_Process}
-   \caption{The upgraded bunch charge system process.}
-   \label{fig:bcm_atca}
+  \centering
+  \includegraphics*[width=.8\columnwidth]{BCM_ATCA_Process}
+  \caption{The upgraded bunch charge system process.}
+  \label{fig:bcm_atca}
 \end{figure}
 
 \begin{enumerate}
-   \item Similarly to the VME system, the timing system sends a packet containing the timing pattern with event codes and the timestamp, but now, the ATCA RTM receives this information and send it to the Carrier Board.
-   \item Now we have the FPGA firmware working with triggering the digitizer and waiting for the array of data to arrive.
-   \item The firmware calculates the bunch charge.
-   \item One Carrier Board is connected to many toroids. The firmware calculates the charge based of all of them and sets RTM digital signals according to the comparison of the results. These digital signals are received by the MPS, that will react if a bad condition raises.
-   \item The result of the calculation is sent to the CPU.
-   \item The result of the calculation is recorded in the many EPICS records that are part of the BSA system.
+  \item Similarly to the VME system, the timing system sends a packet containing the timing pattern with event codes and the timestamp, but now, the ATCA RTM receives this information and send it to the Carrier Board.
+  \item Now we have the FPGA firmware working with triggering the digitizer and waiting for the array of data to arrive.
+  \item The firmware calculates the bunch charge.
+  \item One Carrier Board is connected to many toroids. The firmware calculates the charge based on all of them and sets RTM digital signals according to the comparison of the results. These digital signals are received by the MPS, that will react if a bad condition raises.
+  \item The result of the calculation is sent to the CPU.
+  \item The result of the calculation is recorded in the many EPICS records that are part of the BSA system.
 \end{enumerate}
 
 The same way as we've seen for the BLEN, the interfaces to the external systems were not changed.
 
 \section{Results and Discussion}
 \subsection{Bunch Length}
-As seen in Fig. \ref{fig:blen_struct2}, the BLEN system uses two pyro detectors. In order to test the new system, one of them was connected to the digitizer in the ATCA. The accelerator was run with both systems operating at the same time. A positive test result should provide the exact same scalar number for the BLEN at the same beam pulse in both systems.
+As seen in Fig. \ref{fig:blen_struct2}, the BLEN system uses two pyro detectors. To test the new system, one of them was connected to the digitizer in the ATCA. The accelerator was run with both systems operating at the same time. A positive test result should provide the same scalar number for the BLEN at the same beam pulse in both systems.
 
 Both pyro detector BLEN systems, one in sector 21, after Bunch Compressor (BC) 1, and one in sector 24 after BC 2 were tested.
 
 The test was performed for many different lengths. A correlation of 1 should be observed when we plot the measurement of one system against the other. Figure \ref{fig:blen_result} shows the scattering with the VME system in the x-axis and the ATCA system in the y-axis. The linear regression result shows that the correlation is close to 1, does confirming that the new system provides the same expected results.
 
 \begin{figure}[!htb]
-   \centering
-   \includegraphics*[width=\columnwidth]{blen_result}
-   \caption{Measured bunch length correlation between the ATCA (Mission Readiness) and the VME (Current) system in sector 24.}
-   \label{fig:blen_result}
+  \centering
+  \includegraphics*[width=\columnwidth]{blen_result}
+  \caption{Measured bunch length correlation between the ATCA (Mission Readiness) and the VME (Current) system in sector 24.}
+  \label{fig:blen_result}
 \end{figure}
 
 During a few tests, the Fast-Feedback system received data from the ATCA system and the accelerator could be operated normally, as before.
@@ -224,111 +222,31 @@ During a few tests, the Fast-Feedback system received data from the ATCA system 
 The filters were moved and we could check the reading of the limit switches according to what was expected.
 
 \subsection{Bunch Charge}
+Two toroids in sector 24 were tested, following the procedure below. We call Input Toroid as the toroid upstream in the sector, closer to the electron gun. So, the Output Toroid is downstream in the sector.
 
+\begin{enumerate}
+  \item The MPS system was configured to ignore alerts from the toroids in sector 24.
+  \item Still using the VME system for both toroids, we measured the correlation between the Input and the Output toroids to make sure that it was 1.
+  \item We physically switched the Input Toroid cable to the ATCA system and measured the correlation with the Output Toroid running the VME system. Calibrating the ATCA system parameters, we could get a 1 correlation.
+  \item We switched back the Input Toroid cable to the VME system and made the opposite with the Output Toroid. Again, adjusting the ATCA system parameters we've got a 1 correlation.
+  \item Finally, we put both toroids in the ATCA system and measured successfully a correlation of 1.
+\end{enumerate}
+
+Once both toroids were running in the ATCA system, we connected the digital signals to the MPS system and activated it. With the accelerator running, no signal tripped the MPS. We forced both systems to generate alerts to the MPS and it reacted blocking the injector, as expected.
+
+Tests couldn't be done in sector 21 because the cables were too short to reach the new rack and there was no time slot before the start of the long 1-year downtime.
 
 \section{CONCLUSION}
+Given the successful test results, the ATCA-based Bunch Length system is ready to replace the VME-based system in both sectors 21 and 24.
 
-bla bla bla.
+The ATCA-based Bunch Charge system is ready in sector 24 but will require calibration for the 4 toroids in sector 21 and tests with the MPS before the replacement takes place.
+
+The Mission Readiness project goal was achieved, as it was proven that the ATCA-based systems could make the accelerator operate correctly together with all other sub-systems and operator interfaces.
 
 \section{ACKNOWLEDGMENTS}
+Many people contributed to the success of this project. The authors would like to acknowledge Bryce Jacobson, Carolina Bianchini, Charles Granieri, Chris Ford, Ernest Williams, Hugo Slepicka, Jeremy Mock, Jesus Stanescu, Kenneth Brobeck, Kristi Luchini, Kukhee Kim, Luciano Piccoli, Maria Urbina, Matt Gibbs, Richard Truong, Shawn Alverson, Sonya Hoobler, Thuy Vu, Till Straumann, and Timothy Maxwell.
 
-bla bla bla.
-
-\section{jacow examples to help}
-
-\begin{table}[!hbt]
-   \centering
-   \caption{Margin Specifications}
-   \begin{tabular}{lcc}
-       \toprule
-       \textbf{Margin} & \textbf{A4 Paper}                      & \textbf{US Letter Paper} \\
-       \midrule
-           Top         & \SI{37}{mm} (\SI{1.46}{in})            & \SI{0.75}{in} (\SI{19}{mm})        \\ %[3pt]
-          Bottom       & \SI{19}{mm} (\SI{0.75}{in})            & \SI{0.75}{in} (\SI{19}{mm})        \\ %[3pt]
-           Left        & \SI{20}{mm} (\SI{0.79}{in})            & \SI{0.79}{in} (\SI{20}{mm})        \\ %[3pt]
-           Right       & \SI{20}{mm} (\SI{0.79}{in})            & \SI{1.02}{in} (\SI{26}{mm})        \\
-       \bottomrule
-   \end{tabular}
-   \label{tab:margins}
-\end{table}
-
-
-\begin{figure}[!htb]
-   \centering
-   \includegraphics*[width=.7\columnwidth]{JACpic_mc}
-   \caption{Layout of papers.}
-   \label{fig:paper_layout}
-\end{figure}
-
-\begin{figure*}[!tbh]
-    \centering
-    \includegraphics*[width=\textwidth]{JACpic2}
-
-    \caption{Example of a full-width figure showing the JACoW Team at their annual
-    	     meeting in December 2018. This figure has a multi-line caption that has to be
-    	     justified rather than centred.} %US
-    \label{fig:jacow_team}
-\end{figure*}
-
-\begin{equation}\label{eq:label}
-    C_B=\frac{q^3}{3\epsilon_{0} mc}=\SI{3.54}{\micro eV/T}
-\end{equation}
-
-
-  \begin{table}[h!b]
-	\setlength\tabcolsep{3.5pt}
-	\centering
-	\caption{Summary of Styles}
-	\label{tab:styles}
-	\begin{tabular}{llcc}
-		\toprule
-		\textbf{Style} & \textbf{Font}               & \textbf{Space}  & \textbf{Space} \\
-		&                             & \textbf{Before} & \textbf{After} \\
-		\midrule
-		\textbf{PAPER}  & \SI{14}{pt}                 & \SI{0}{pt}      & \SI{3}{pt}  \\
-		\textbf{TITLE}  & \textbf{UPPERCASE}          &                 &      \\
-		& \textbf{EXCEPT FOR}         &                 &      \\
-		& \textbf{REQUIRED lowercase} &                 &      \\
-		& \textbf{letters}            &                 &      \\
-		& \textbf{Bold}               &                 &      \\[5pt]
-		%\midrule
-		Author list  & \SI{12}{pt}                 & \SI{9}{pt}      & \SI{12}{pt} \\
-		& UPPER- and lowercase        &                 &      \\[5pt]
-		%\midrule
-		\textit{Abstract} & \SI{12}{pt}                 & \SI{0}{pt}      & \SI{3}{pt} \\
-		\textit{Title}  & \textit{Initial Caps}       &                 &      \\
-		& \textit{Italic}             &                 &      \\[5pt]
-		%\midrule
-		\textbf{Section}  & \SI{12}{pt}                 & \SI{9}{pt}      & \SI{3}{pt}  \\
-		\textbf{Heading}  & \textbf{UPPERCASE}          &                 &      \\
-		& \textbf{bold}               &                 &      \\[5pt]
-		%\midrule
-		\textit{Subsection} & \SI{12}{pt}                 & \SI{6}{pt}      & \SI{3}{pt}  \\
-		\textit{Heading}
-                             & \textit{Initial Caps}       &                 &      \\
-		& \textit{Italic}             &                 &      \\[5pt]
-		%\midrule
-		\textbf{Third-level} & \SI{10}{pt}                 & \SI{6}{pt}      & \SI{0}{pt}  \\
-		\textbf{Heading}     
-                            & \textbf{Initial Caps}       &                 &      \\
-		& \textbf{Bold}               &                 &      \\[5pt]
-		%\midrule
-		Figure        & \SI{10}{pt}                 & \SI{3}{pt}      & $\ge$\SI{3}{pt}  \\
-		Captions      &                             &                 &      \\[5pt]
-		%\midrule
-		Table         & \SI{10}{pt}                 & $\ge$\SI{3}{pt} & \SI{3}{pt}  \\
-		Captions	  &                             &                 &      \\[5pt]
-		%\midrule
-		Equations     & \SI{10}{pt} base font       & $\ge$\SI{6}{pt}     & $\ge$\SI{6}{pt} \\[5pt]
-		%\midrule
-		References      & \SI{9}{pt}				& \SI{0}{pt}      & \SI{3}{pt} \\
-        when $\le9$ 	& \verb|\bibliography{9}|	&                 &  \\[5pt]
-        Refs. $\ge10$ 	& \SI{9}{pt}				& \SI{0}{pt}      & \SI{3}{pt}  \\
-                		& \verb|\bibliography{99}|	&    &    \\
-		\bottomrule   %\SI{0.25}{in}
-	\end{tabular}
-\end{table}
-
+We acknowledge Josef Frisch and Juhao Wu for authorizing the use of the figures explaining the Bunch Length structure.
 
 %
 % only for "biblatex"
@@ -338,7 +256,7 @@ bla bla bla.
 	{%
 	% "biblatex" is not used, go the "manual" way
 	
-	%\begin{thebibliography}{99}   % Use for  10-99  references
+	%\begin{thebibliography}{99}  % Use for 10-99 references
 	\begin{thebibliography}{9} % Use for 1-9 references
 	
 	\bibitem{jacow-help}
