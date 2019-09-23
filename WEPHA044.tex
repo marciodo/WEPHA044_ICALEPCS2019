@@ -77,17 +77,17 @@
 
 
 \begin{abstract}
-In 2019 SLAC is building a new linear accelerator based on superconducting niobium cavities. The first one, now called the copper linac, could generate 120 electron bunches per second. The new one, called superconducting linac, will generate 1 million per second, bringing some challenges to many devices along with the accelerator. Most of them receive sensors and actuators in a VME-based Platform with its control running in software, with RTEMS as OS. This is feasible for 120 Hz, but not for 1 MHz. The new control hardware is ATCA-based Platform, that has carrier boards with FPGA connected to servers running Embedded real-time Linux OS, forming the High-Performance System (HPS). Instead of having all the new architecture installed at the accelerator and tested on the go, SLAC used the strategy of testing the systems in the copper linac, to have them ready to use in the superconducting linac in what was called the Mission Readiness Program. The Bunch Length System and the Bunch Charge System are examples of devices of this program. Both systems were tested in the copper linac at 120 Hz, with excellent results. The next step is to test them at the superconducting linac, at 1 MHz.
+In 2019 SLAC is building a new linear accelerator based on superconducting niobium cavities. The first one, now called the copper linac, could generate 120 electron bunches per second. The new one, called the superconducting linac, will generate 1 million per second, bringing some challenges to many devices along with the accelerator. Most sensors and actuators in the copper linac are interfaced through a VME-based Platform with its control running in software, with RTEMS as OS. This is feasible for 120 Hz, but not for 1 MHz. The new control hardware is ATCA-based Platform, that has carrier boards with FPGA connected to servers running Embedded real-time Linux OS, forming the High-Performance System (HPS). Instead of having all the new architecture installed at the accelerator and tested on the go, SLAC used the strategy of testing the systems in the copper linac, to have them ready to use in the superconducting linac in what was called the Mission Readiness Program. The Bunch Length System and the Bunch Charge System are examples of devices of this program. Both systems were tested in the copper linac at 120 Hz, with excellent results. The next step is to test them at the superconducting linac, at 1 MHz.
 \end{abstract}
 
 
 \section{Introduction}
-LCLS has two bunch length monitors (BLEN) based on pyro detectors \cite{blen-pac07} and 13 bunch charge monitors based on Toroids \cite{slac-toroids}, the two types of devices that are in the scope of this upgrade. Beyond these devices, LCLS uses gap diode to measure the bunch length \cite{injector-commissioning-2007} and, to measure the bunch charge, Faraday cups \cite{slac-toroids} and BPMs \cite{beam-measurement}.
+LCLS has two bunch length monitors (BLEN) based on pyroelectric detectors \cite{blen-pac07} and 13 bunch charge monitors based on Toroids \cite{slac-toroids}, the two types of devices that are in the scope of this upgrade. Beyond these devices, LCLS uses gap diode to measure the bunch length \cite{injector-commissioning-2007} and, to measure the bunch charge, Faraday cups \cite{slac-toroids} and BPMs \cite{beam-measurement}.
 
-\subsection{Pyro Detector Bunch Length Structure}
-LCLS has two bunch compressors (BC). A hole mirror is placed after the last bending magnet of each BC, generating diffraction radiation (DR) from the edge radiation (ER) (see Fig. \ref{fig:blen_struct1}). The DR is, then, reflected, split, and filtered before getting to two pyro detectors (see Fig. \ref{fig:blen_struct2}). \cite{blen-pac07}
+\subsection{Pyroelectric Detector Bunch Length Structure}
+LCLS has two bunch compressors (BC). Edge radiation (ER) emitted at the exiting edge of the last bending magnet of each bunch compressor is extracted from the beamline by a mirror at 45 degrees to the beam (see Fig. \ref{fig:blen_struct1}). A hole in the center of the mirror allows the electrons to pass but also emits diffraction radiation (DR). The ER is reflected, split, filtered, and focused by an off-axis parabolic mirror (OAP) onto two pyroelectric detectors (see Fig. \ref{fig:blen_struct2}). The DR, which is emitted much closer to the OAP, does not image onto the pyroelectric detectors. This light is spread out and produces little signal. \cite{blen-pac07}
 
-By using specific optical filters it is possible to measure the difference in the intensity of the signals at the pyro detector output for different lengths of the bunch. Comparing signal intensity for different bunches it is possible to know that one bunch is larger or shorter relative to the other. Calculating the absolute length is only possible when the charge of the beam is used for normalization. [reference]
+By using specific optical filters it is possible to measure the difference in the intensity of the signals at the pyroelectric detector output for different lengths of the bunch. Comparing signal intensity for different bunches it is possible to know that one bunch is longer or shorter relative to the other. Calculating the absolute length is only possible when the charge of the beam is used for normalization. [reference]
 
 \begin{figure}[!htb]
   \centering
@@ -99,24 +99,24 @@ By using specific optical filters it is possible to measure the difference in th
 \begin{figure}[!htb]
   \centering
   \includegraphics*[width=\columnwidth]{BunchLengthStruct_2}
-  \caption{Optical structure of the bunch length system showing how the DR is reflected, split, and filtered before getting to the pyro detectors. Reproduced from \cite{blen-pac07} with permission from the authors.}
+  \caption{Optical structure of the bunch length system showing how the ER is reflected, split, and filtered before getting to the pyroelectric detectors. Reproduced from \cite{blen-pac07} with permission from the authors.}
   \label{fig:blen_struct2}
 \end{figure}
 
 \subsection{Toroid Bunch Charge Monitor (BCM) Structure}
-A toroid is placed at the accelerator in a way that the electron beam passes through its hole, inducing a current in the turns. This current is conditioned and digitized. By measuring the peak of the conditioned signal, the system can calculate the bunch charge. For an explanation of the theory, please refer to \cite{slac-pub-398}.
+A toroid is placed around the accelerator beamline so that the electron beam passes through its hole, inducing a current in the turns. This current is conditioned and digitized. By measuring the peak of the conditioned signal, the system can calculate the bunch charge. For an explanation of the theory, please refer to \cite{slac-pub-398}.
 
 \subsection{The Mission Readiness Program}
-SLAC Mission Readiness Program goal is to implement improvements in the present to guarantee that the laboratory will comply with its mission in the future and maintain it in the long-term \cite{doe-MR}. The upgrade of the control system for LCLS is part of this broader program.
+The goal of the SLAC Mission Readiness Program is to implement improvements in the present to guarantee that the laboratory will comply with its mission in the future and maintain it in the long-term \cite{doe-MR}. The upgrade of the control system for LCLS is part of this broader program.
 
-As the description of the previous Bunch Length and Bunch Charge Systems will show in the next sections, before the LCLS upgrade all the process was held by software running in RTEMS OS. Since we were in a condition where the minimum distance between the bunches was 8.33 ms, it was feasible to let the software running in a real-time OS take care of all the processing. The new XFEL, though, will operate at a maximum of 1 MHz frequency, which reduces the time between bunches to \SI{1}{\micro\meter}. For this time range, another architecture is needed. [reference]
+As the description of the previous Bunch Length and Bunch Charge Systems will show in the next sections, before the LCLS upgrade signal processing was done by software running in RTEMS OS. Since we were in a condition where the minimum distance between the bunches was 8.33 ms, it was feasible to let the software running in a real-time OS take care of all the processing. The new XFEL, though, will operate at a maximum of 1 MHz frequency, which reduces the time between bunches to \SI{1}{\micro\second}. For this time range, another architecture is needed. [reference]
 
 To work with high-processing speed, SLAC has chosen to use FPGAs. The architecture of choice to have the FPGAs on board was ATCA [reference].
 
-Within the Mission Readiness Program, there was the substitution of the VME-based architecture with the ATCA, still using the 120 Hz frequency. The goal was to verify if the Copper Linac would still operate as before after the control hardware was changed.
+The Mission Readiness Program substituted VME for the ATCA-based architecture, while still retaining the 120-Hz rate. The goal was to verify if the copper linac would still operate as before after the control hardware was changed.
 
 \section{Bunch Length System}
-The signal of the pyro detectors is digitized, processed by an equation that results in the length of the bunch, and timestamped to log a correspondence between the result and the electron bunch among all the accelerator systems. In the next two sections, we will show the architecture of the previous VME-based system and how it was upgraded to an ATCA-based architecture.
+The pyroelectric detectors signal is digitized, processed by an equation that results in the length of the bunch, and timestamped to log a correspondence between the result and the electron bunch throughout the accelerator systems. In the next two sections, we will show the architecture of the previous VME-based system and how it was upgraded to an ATCA-based architecture.
 
 \subsection{VME-based architecture}
 Figure \ref{fig:blen_vme} shows the high-level process of the original bunch length system.
@@ -130,17 +130,17 @@ Figure \ref{fig:blen_vme} shows the high-level process of the original bunch len
 
 \begin{enumerate}
   \item The timing system sends a packet containing the timing pattern with event codes and the timestamp. The EVR in the VME crate receives this data. The IOC running in VME waits for a specific event code. When it arrives, the timestamp is registered.
-  \item Using the IP 445 module, the IOC running in VME sends a trigger to the digitizer, telling it to start collecting data from the pyro detector.
-  \item The IOC running in the VME tells to the IOC running in the Digitizer that it is waiting for data as soon as the Digitizer finishes its digitalization. The VME IOC also sends a timestamp that will be used by the Digitizer IOC as a data label.
-  \item When the digitalization is complete, the Digitizer IOC sends an UDPComm packet to the VME IOC with the digitized data containing one raw waveform per each of the pyro detectors. The data is labeled with the timestamp previously sent by the VME IOC. 
-  \item Parallel to the communication with the Digitizer IOC, the VME IOC receives the charge of the bunch (TMIT) sent by the BPM system, through an FCOM packet.
-  \item The VME IOC confirms the timestamp from the EVR, the Digitizer, and the BPM system and, if they match, it calculates the bunch length.
+  \item Using the IP 445 module, the IOC running in VME sends a trigger to the digitizer, telling it to start collecting data from the pyroelectric detector.
+  \item The IOC running in VME tells the IOC running in the Digitizer that it is waiting for data as soon as the digitization is complete. The VME IOC also sends a timestamp that will be used by the Digitizer IOC as a data label.
+  \item After digitization, the Digitizer IOC sends an UDPComm packet to the VME IOC with the digitized data containing one raw waveform for each pyroelectric detector. The data is labeled with the timestamp previously sent by the VME IOC. 
+  \item Parallel to the communication with the Digitizer IOC the VME IOC receives the charge of the bunch (TMIT), sent by the BPM system through an FCOM packet.
+  \item The VME IOC compares the timestamps from the EVR, the Digitizer, and the BPM system. If they match, the VME IOC calculates the bunch length.
   \item The result of the calculation is recorded in the many EPICS records that are part of the BSA system.
-  \item The IOC sends an FCOM package to the Fast Feedback System, containing the calculated bunch length.
+  \item The VME IOC sends an FCOM package to the Fast Feedback System, containing the calculated bunch length.
 \end{enumerate}
 
 \subsection{ATCA-based architecture}
-Figure \ref{fig:blen_atca} shows how the new architecture was applied to the Bunch Length System of the Copper Linac. Here we don't show the complete ATCA architecture for the sake of simplicity, but the detailed description can be found in \cite{ryan-2016, atca-bpm-2017}.
+Figure \ref{fig:blen_atca} shows how the new architecture was applied to the Bunch Length System of the copper linac. Here we don't show the complete ATCA architecture for the sake of simplicity, but the detailed description can be found in \cite{ryan-2016, atca-bpm-2017}.
 
 \begin{figure}[!htb]
   \centering
@@ -150,20 +150,20 @@ Figure \ref{fig:blen_atca} shows how the new architecture was applied to the Bun
 \end{figure}
 
 \begin{enumerate}
-  \item Similarly to the VME system, the timing system sends a packet containing the timing pattern with event codes and the timestamp, but now, the ATCA RTM receives this information and send it to the Carrier Board.
-  \item Now we have the FPGA firmware working with triggering the digitizer and waiting for the array of data to arrive.
-  \item The same as in the VME system, the IOC receives the charge of the bunch (TMIT) sent by the BPM system, through an FCOM packet.
-  \item The IOC sends the TMIT and timestamp to the FPGA firmware as it is an input for the bunch length calculation.
+  \item Similarly to the VME system, the timing system sends a packet containing the timing pattern with event codes and the timestamp, but now the ATCA RTM receives this information and send it to the Carrier Board.
+  \item The FPGA firmware triggers the digitizer and waits for the array of data to arrive.
+  \item The same as in the VME system, the IOC running in the CPU receives the charge of the bunch (TMIT) sent by the BPM system, through an FCOM packet.
+  \item The IOC sends the TMIT and timestamp to the FPGA firmware as an input for the bunch length calculation.
   \item The firmware calculates the bunch length.
   \item The result of the calculation is sent to the CPU.
   \item The result of the calculation is recorded in the many EPICS records that are part of the BSA system.
   \item The VME IOC sends an FCOM package to the Fast Feedback System, containing the calculated bunch length.
 \end{enumerate}
 
-The steps related to external systems (1, 3, 7, and 8) were kept the same as these systems wouldn't be changed.
+The steps related to external systems (1, 3, 7, and 8) were kept the same since these systems will not be changed.
 
 \section{Bunch Charge System}
-The conditioned signal of the toroid is digitized, processed by an equation that results in the charge of the bunch, and timestamped to log a correspondence between the result and the electron bunch among all the accelerator systems. In the next two sections, we will show the architecture of the previous VME-based system and how it was upgraded to an ATCA-based architecture.
+The conditioned signal of the toroid is digitized, processed by an equation that results in the charge of the bunch, and timestamped to log a correspondence between the result and the electron bunch throughout the accelerator systems. In the next two sections, we will show the architecture of the previous VME-based system and how it was upgraded to an ATCA-based architecture.
 
 \subsection{VME-based architecture}
 Figure \ref{fig:bcm_vme} shows the high-level process of the original bunch charge system.
@@ -184,7 +184,7 @@ Figure \ref{fig:bcm_vme} shows the high-level process of the original bunch char
 \end{enumerate}
 
 \subsection{ATCA-based architecture}
-Figure \ref{fig:bcm_atca} shows how the new architecture was applied to the Bunch Charge System of the Copper Linac. Here we don't show the complete ATCA architecture for the sake of simplicity, but the detailed description can be found in \cite{ryan-2016, atca-bpm-2017}.
+Figure \ref{fig:bcm_atca} shows how the new architecture was applied to the Bunch Charge System of the copper linac. Here we don't show the complete ATCA architecture for the sake of simplicity, but the detailed description can be found in \cite{ryan-2016, atca-bpm-2017}.
 
 \begin{figure}[!htb]
   \centering
@@ -194,23 +194,23 @@ Figure \ref{fig:bcm_atca} shows how the new architecture was applied to the Bunc
 \end{figure}
 
 \begin{enumerate}
-  \item Similarly to the VME system, the timing system sends a packet containing the timing pattern with event codes and the timestamp, but now, the ATCA RTM receives this information and send it to the Carrier Board.
-  \item Now we have the FPGA firmware working with triggering the digitizer and waiting for the array of data to arrive.
+  \item Similarly to the VME system, the timing system sends a packet containing the timing pattern with event codes and the timestamp, but now the ATCA RTM receives this information and send it to the Carrier Board.
+  \item The FPGA firmware triggers the digitizer and waits for the array of data to arrive.
   \item The firmware calculates the bunch charge.
-  \item One Carrier Board is connected to many toroids. The firmware calculates the charge based on all of them and sets RTM digital signals according to the comparison of the results. These digital signals are received by the MPS, that will react if a bad condition raises.
+  \item One Carrier Board is connected to many toroids. The firmware calculates the charge based on all of them and sets RTM digital signals according to the comparison of the results. These digital signals are received by the MPS, which reacts if a bad condition raises.
   \item The result of the calculation is sent to the CPU.
   \item The result of the calculation is recorded in the many EPICS records that are part of the BSA system.
 \end{enumerate}
 
-The same way as we've seen for the BLEN, the interfaces to the external systems were not changed.
+As with the BLEN, the interfaces to the external systems were not changed.
 
 \section{Results and Discussion}
 \subsection{Bunch Length}
-As seen in Fig. \ref{fig:blen_struct2}, the BLEN system uses two pyro detectors. To test the new system, one of them was connected to the digitizer in the ATCA. The accelerator was run with both systems operating at the same time. A positive test result should provide the same scalar number for the BLEN at the same beam pulse in both systems.
+As seen in Fig. \ref{fig:blen_struct2}, the BLEN system uses two pyroelectric detectors. To test the new system, one of them was connected to the digitizer in the ATCA. The accelerator was run with both systems operating at the same time. A positive test result should provide the same scalar number for the BLEN at the same beam pulse in both systems.
 
-Both pyro detector BLEN systems, one in sector 21, after Bunch Compressor (BC) 1, and one in sector 24 after BC 2 were tested.
+Both pyroelectric detector BLEN systems, one in sector 21, after Bunch Compressor (BC) 1, and one in sector 24 after BC 2 were tested.
 
-The test was performed for many different lengths. A correlation of 1 should be observed when we plot the measurement of one system against the other. Figure \ref{fig:blen_result} shows the scattering with the VME system in the x-axis and the ATCA system in the y-axis. The linear regression result shows that the correlation is close to 1, does confirming that the new system provides the expected results.
+The test was performed for many different lengths. A correlation of 1 should be observed when we plot the measurement of one system against the other. Figure \ref{fig:blen_result} shows the scattering with the VME system on the x-axis and the ATCA system on the y-axis. The linear regression result shows that the correlation is close to 1, confirming that the new system provides the expected results.
 
 \begin{figure}[!htb]
   \centering
@@ -219,18 +219,18 @@ The test was performed for many different lengths. A correlation of 1 should be 
   \label{fig:blen_result}
 \end{figure}
 
-During a few tests, the Fast-Feedback system received data from the ATCA system and the accelerator could be operated normally, as before.
+During a few tests, the Fast-Feedback system received data from the ATCA system. The accelerator operated normally, as before.
 
-The filters were moved and we could check the reading of the limit switches according to what was expected.
+The filters were moved to verify the readback from the limit switches, with positive results.
 
 \subsection{Bunch Charge}
-The toroids in sector 24 and 25 were tested, following the procedure below. We call Input Toroid as the toroid upstream in sector 24, closer to the electron gun. The Output Toroid is downstream in sector 25.
+The toroids in sector 24 and 25 were tested, following the procedure below. The input toroid is the upstream toroid in sector 24, closer to the electron gun. The output toroid is downstream in sector 25.
 
 \begin{enumerate}
-  \item The MPS system was configured to ignore alerts from the toroids being tested.
-  \item Still using the VME system for both toroids, we measured the correlation between the Input and the Output toroids to make sure that it was 1.
-  \item We physically switched the Input Toroid cable to the ATCA system and measured the correlation with the Output Toroid running the VME system. Calibrating the ATCA system parameters, we could get a 1 correlation.
-  \item We switched back the Input Toroid cable to the VME system and made the opposite with the Output Toroid. Again, adjusting the ATCA system parameters we've got a 1 correlation.
+  \item The MPS was configured to ignore alerts from the toroids being tested.
+  \item Still using the VME system for both toroids, we measured the correlation between the Input and the output toroids to make sure that it was 1.
+  \item We physically switched the input toroid cable to the ATCA system and measured the correlation with the output toroid still running through VME. Calibrating the ATCA system parameters, we could get a 1 correlation.
+  \item We switched the input toroid cable back to the VME system and connected the output toroid to ATCA. Again, adjusting the ATCA system parameters we've got a 1 correlation.
   \item Finally, we put both toroids in the ATCA system and measured successfully a correlation of 1.
 \end{enumerate}
 
@@ -243,7 +243,7 @@ Figure \ref{fig:bcm_result} shows the result when the Input Toroid was switched 
   \label{fig:bcm_result}
 \end{figure}
 
-Once both toroids were running in the ATCA system, we connected the digital signals to the MPS system and activated it. With the accelerator running, no signal tripped the MPS. We forced both systems to generate alerts to the MPS and it reacted blocking the injector, as expected.
+Once both toroids were running in the ATCA system, we connected the digital signals to the MPS and activated it. With the accelerator running, no signal tripped the MPS. We forced both systems to generate alerts to the MPS, which reacted by blocking the injector, as expected.
 
 Tests couldn't be done in sector 21 because the cables were too short to reach the new rack and there was no time slot before the start of the long 1-year downtime to install new cables.
 
@@ -252,9 +252,9 @@ Given the successful test results, the ATCA-based Bunch Length system is ready t
 
 The ATCA-based Bunch Charge system is ready in sector 24 but will require calibration for the 4 toroids in sector 21 and tests with the MPS before the replacement takes place.
 
-The Mission Readiness Program goal was achieved for BLEN and BCM systems, as it was proven that the ATCA-based systems could make the Copper Linac operate correctly at 120 Hz together with all other sub-systems and operator interfaces.
+The Mission Readiness Program goal was achieved for BLEN and BCM systems, as it was proven that the ATCA-based systems could make the copper linac operate correctly at 120 Hz together with all other sub-systems and operator interfaces.
 
-The next step is to test the ATCA-based system with the new Superconducting Linac at 1 MHz.
+In the next step, final measurements and the switchover to ATCA will take place on the copper linac when operations resume at the end of 2019. Commissioning of the superconducting linac will begin in 2021.
 
 \section{ACKNOWLEDGMENTS}
 Many people contributed to the success of this project. The authors would like to acknowledge Bryce Jacobson, Carolina Bianchini, Charles Granieri, Chris Ford, Ernest Williams, Hugo Slepicka, Jeremy Mock, Jesus Stanescu, Kenneth Brobeck, Kristi Luchini, Kukhee Kim, Luciano Piccoli, Maria Urbina, Matt Gibbs, Richard Truong, Shawn Alverson, Sonya Hoobler, Thuy Vu, Till Straumann, and Timothy Maxwell.
