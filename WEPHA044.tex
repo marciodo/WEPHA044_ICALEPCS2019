@@ -85,7 +85,7 @@ In 2019 SLAC is building a new linear accelerator based on superconducting niobi
 LCLS has two bunch length monitors (BLEN) based on pyroelectric detectors \cite{blen-pac07} and 13 bunch charge monitors based on Toroids \cite{slac-toroids}, the two types of devices that are in the scope of this upgrade. Beyond these devices, LCLS uses gap diode to measure the bunch length \cite{injector-commissioning-2007} and, to measure the bunch charge, Faraday cups \cite{slac-toroids} and BPMs \cite{beam-measurement}.
 
 \subsection{Pyroelectric Detector Bunch Length Structure}
-LCLS has two bunch compressors (BC). Edge radiation (ER) emitted at the exiting edge of the last bending magnet of each bunch compressor is extracted from the beamline by a mirror at 45 degrees to the beam (see Fig. \ref{fig:blen_struct2}). A hole in the center of the mirror allows the electrons to pass but also emits diffraction radiation (DR) (see Fig. \ref{fig:blen_struct1}). The ER is reflected, split, filtered, and focused by an off-axis parabolic mirror (OAP) onto two pyroelectric detectors \cite{blen-pac07}. The DR, which is emitted much closer to the OAP, does not image onto the pyroelectric detectors. This light is spread out and produces little signal.
+LCLS has two bunch compressors (BC). Edge radiation (ER) emitted at the exiting edge of the last bending magnet of each bunch compressor is extracted from the beamline by a mirror at 45 degrees to the beam (see Fig. \ref{fig:blen_struct2}). A hole in the center of the mirror allows the electrons to pass but also emits diffraction radiation (DR) (see Fig. \ref{fig:blen_struct1}). The ER is reflected, split, filtered, and focused by an off-axis parabolic mirror (OAP) onto two pyroelectric detectors \cite{blen-pac07}. The DR, which is emitted much closer to the OAP, does not image onto the pyroelectric detectors. This light is spread out and produces a little signal.
 
 By using specific optical filters it is possible to measure the difference in the intensity of the signals at the pyroelectric detector output for different lengths of the bunch. Comparing signal intensity for different bunches it is possible to know that one bunch is longer or shorter relative to the other. Calculating the absolute length is only possible when the system is calibrated in advance using invasive methods, like a transverse deflecting cavity. \cite{blen-pac07}
 
@@ -109,9 +109,9 @@ A toroid is placed around the accelerator beamline so that the electron beam pas
 \subsection{The Mission Readiness Program}
 The goal of the SLAC Mission Readiness Program is to implement improvements in the present to guarantee that the laboratory will comply with its mission in the future and maintain it in the long-term \cite{doe-MR}. The upgrade of the control system for LCLS is part of this broader program.
 
-As the description of the previous Bunch Length and Bunch Charge Systems will show in the next sections, before the LCLS upgrade signal processing was done by software running in RTEMS OS. Since we were in a condition where the minimum distance between the bunches was 8.33 ms, it was feasible to let the software running in a real-time OS take care of all the processing. The new XFEL, though, will operate at a maximum of 1 MHz frequency, which reduces the time between bunches to \SI{1}{\micro\second}. For this time range, another architecture is needed. [reference]
+As the description of the previous Bunch Length and Bunch Charge Systems will show in the next sections, before the LCLS upgrade signal processing was done by software running in RTEMS OS. Since we were in a condition where the minimum distance between the bunches was 8.33 ms, it was feasible to let the software running in a real-time OS take care of all the processing. The new XFEL, though, will operate at a maximum of 1 MHz frequency, which reduces the time between bunches to \SI{1}{\micro\second}. For this time range, another architecture is needed \cite{timing-low-level-2012, rt-performance-2012}.
 
-To work with high-processing speed, SLAC has chosen to use FPGAs. The architecture of choice to have the FPGAs on board was ATCA [reference].
+To work with high-processing speed, SLAC has chosen to use FPGAs. The architecture of choice to have the FPGAs on board was ATCA \cite{ryan-2016, vme-replacement-2012}.
 
 The Mission Readiness Program substituted VME for the ATCA-based architecture, while still retaining the 120-Hz rate. The goal was to verify if the copper linac would still operate as before after the control hardware was changed.
 
@@ -150,7 +150,7 @@ Figure \ref{fig:blen_atca} shows how the new architecture was applied to the Bun
 \end{figure}
 
 \begin{enumerate}
-  \item Similarly to the VME system, the timing system sends a packet containing the timing pattern with event codes and the timestamp, but now the ATCA RTM receives this information and send it to the Carrier Board.
+  \item Similarly to the VME system, the timing system sends a packet containing the timing pattern with event codes and the timestamp, but now the ATCA RTM receives this information and sends it to the Carrier Board.
   \item The FPGA firmware triggers the digitizer and waits for the array of data to arrive.
   \item The same as in the VME system, the IOC running in the CPU receives the charge of the bunch (TMIT) sent by the BPM system, through an FCOM packet.
   \item The IOC sends the TMIT and timestamp to the FPGA firmware as an input for the bunch length calculation.
@@ -194,10 +194,10 @@ Figure \ref{fig:bcm_atca} shows how the new architecture was applied to the Bunc
 \end{figure}
 
 \begin{enumerate}
-  \item Similarly to the VME system, the timing system sends a packet containing the timing pattern with event codes and the timestamp, but now the ATCA RTM receives this information and send it to the Carrier Board.
+  \item Similarly to the VME system, the timing system sends a packet containing the timing pattern with event codes and the timestamp, but now the ATCA RTM receives this information and sends it to the Carrier Board.
   \item The FPGA firmware triggers the digitizer and waits for the array of data to arrive.
   \item The firmware calculates the bunch charge.
-  \item One Carrier Board is connected to many toroids. The firmware calculates the charge based on all of them and sets RTM digital signals according to the comparison of the results. These digital signals are received by the MPS, which reacts if a bad condition raises.
+  \item One Carrier Board is connected to many toroids. The firmware calculates the charge based on all of them and sets RTM digital signals according to the comparison of the results. These digital signals are received by the MPS, which reacts when a bad condition raises.
   \item The result of the calculation is sent to the CPU.
   \item The result of the calculation is recorded in the many EPICS records that are part of the BSA system.
 \end{enumerate}
@@ -228,13 +228,13 @@ The toroids in sector 24 and 25 were tested, following the procedure below. The 
 
 \begin{enumerate}
   \item The MPS was configured to ignore alerts from the toroids being tested.
-  \item Still using the VME system for both toroids, we measured the correlation between the Input and the output toroids to make sure that it was 1.
+  \item Still using the VME system for both toroids, we measured the correlation between the input and the output toroids to make sure that it was 1.
   \item We physically switched the input toroid cable to the ATCA system and measured the correlation with the output toroid still running through VME. Calibrating the ATCA system parameters, we could get a 1 correlation.
   \item We switched the input toroid cable back to the VME system and connected the output toroid to ATCA. Again, adjusting the ATCA system parameters we've got a 1 correlation.
   \item Finally, we put both toroids in the ATCA system and measured successfully a correlation of 1.
 \end{enumerate}
 
-Figure \ref{fig:bcm_result} shows the result when the Input Toroid was switched to the ATCA-based system. The correlation is close to 1 as expected.
+Figure \ref{fig:bcm_result} shows the result when the input toroid was switched to the ATCA-based system. The correlation is close to 1 as expected.
 
 \begin{figure}[!htb]
   \centering
